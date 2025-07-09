@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 
-import { testController } from '@/controllers/text';
+import { testController } from '@/controllers/test';
 import {
   asyncHandler,
   validateRequest,
