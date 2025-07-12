@@ -1,10 +1,9 @@
 [![Starware](https://img.shields.io/badge/Starware-⭐-black?labelColor=f9b00d)](https://github.com/zepfietje/starware)
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
-
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
 
 <br />
 <p align="center">
@@ -45,7 +44,6 @@
     <li><a href="#license">License</a></li>
     <li><a href="#dsc-nit-rourkela">DSC NIT Rourkela</a></li>
     <li><a href="#starware">Starware</a></li>
-    <li><a href="#contributors">Contributors</a></li>
   </ol>
 </details>
 
@@ -299,7 +297,7 @@ Please refer to the project's style and contribution guidelines for submitting p
 1.  **Fork** the repo on GitHub
 2.  **Clone** the project to your local system
     ```bash
-    git clone https://github.com/your-username/project-xangoes.git
+    git clone https://github.com/dscnitrourkela/project-xangoes.git
     cd project-xangoes
     ```
 3.  **Commit** changes to your own separate branch
@@ -414,18 +412,13 @@ This project is Starware.
 This means you're free to use the project, as long as you star its GitHub repository.
 Your appreciation makes us grow and glow up. ⭐
 
-[dsc-nitrourkela]: public/repoCover.png
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+[dsc-nitrourkela]: ./client/public/repoCover.png
+[contributors-shield]: https://img.shields.io/github/contributors/dscnitrourkela/project-xangoes?style=for-the-badge
+[contributors-url]: https://github.com/dscnitrourkela/project-xangoes/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/dscnitrourkela/project-xangoes?style=for-the-badge
+[forks-url]: https://github.com/dscnitrourkela/project-xangoes/network/members
+[stars-shield]: https://img.shields.io/github/stars/dscnitrourkela/project-xangoes?style=for-the-badge
+[stars-url]: https://github.com/dscnitrourkela/project-xangoes/stargazers
+[issues-shield]: https://img.shields.io/github/issues/dscnitrourkela/project-xangoes?style=for-the-badge
+[issues-url]: https://github.com/dscnitrourkela/project-xangoes/issues
+[license-shield]: https://img.shields.io/github/license/dscnitrourkela/project-xangoes?style=for-the-badge

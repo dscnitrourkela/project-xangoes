@@ -205,24 +205,3 @@ The Project Xangoes database consists of **8 core entities** that manage college
 | Find user's transactions     | `User → Transaction`               | Show payment history for user_123          |
 
 ---
-
-## Implementation Notes
-
-### Required Fields Priority
-
-| Priority   | Fields                                             | Reason                   |
-| ---------- | -------------------------------------------------- | ------------------------ |
-| **High**   | `id`, `createdAt`, `updatedAt`                     | Every entity needs these |
-| **Medium** | Primary identifiers (`email`, `name`, `mobile`)    | Core functionality       |
-| **Low**    | Optional metadata (`photo`, `description`, `logo`) | Enhancement features     |
-
-### Performance Considerations
-
-| Entity                | Index Fields                     | Reason                |
-| --------------------- | -------------------------------- | --------------------- |
-| **User**              | `email`, `uid`, `mobile`         | Frequent lookups      |
-| **Event**             | `clubId`, `startDate`, `status`  | Filtering and sorting |
-| **EventRegistration** | `eventID`, `userID`              | Join operations       |
-| **Transaction**       | `userID`, `festID`, `isVerified` | Payment queries       |
-
-This table-based format makes it easy to quickly reference field details, understand relationships, and explain the schema structure to contributors of all technical levels.
