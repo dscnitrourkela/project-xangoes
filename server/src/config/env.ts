@@ -1,4 +1,4 @@
-import type { EnvConfig } from '@/types';
+import type { EnvConfig } from "@/types";
 
 // Helper function to parse environment variables with type conversion
 function parseEnv<T>(
@@ -32,6 +32,8 @@ function requireEnv(key: string): string {
 export const env: EnvConfig = {
     // Server Configuration
     PORT: parseEnv(process.env.PORT, 3000, parseInt),
+    // Database Configuration
+    DATABASE_URL: requireEnv("DATABASE_URL"),
 };
 
 // Validation function for critical environment variables

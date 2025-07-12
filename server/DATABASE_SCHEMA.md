@@ -205,3 +205,61 @@ The Project Xangoes database consists of **8 core entities** that manage college
 | Find user's transactions     | `User → Transaction`               | Show payment history for user_123          |
 
 ---
+
+## Database Scripts & Operations
+
+### 🚀 Drizzle Commands
+
+```json
+{
+    "scripts": {
+        "db:generate": "drizzle-kit generate",
+        "db:push": "drizzle-kit push",
+        "db:migrate": "drizzle-kit migrate",
+        "db:studio": "drizzle-kit studio",
+        "db:drop": "drizzle-kit drop",
+        "db:check": "drizzle-kit check",
+        "db:pull": "drizzle-kit pull"
+    }
+}
+```
+
+This runs with:
+
+```bash
+# Generate migrations
+bun run db:generate
+
+# Push changes to database
+bun run db:push
+
+# Launch database studio
+bun run db:studio
+```
+
+### 📊 Database Setup & Environment
+
+#### Required Environment Variables
+
+```bash
+# .env file
+DATABASE_URL="postgresql://username:password@localhost:5432/xangoes_db"
+```
+
+#### Initial Database Setup
+
+```bash
+# 1. Create database
+createdb xangoes_db
+
+# 2. Generate initial migration
+bun run db:generate
+
+# 3. Apply migrations
+bun run db:push
+
+# 4. Verify in studio
+bun run db:studio
+```
+
+---
