@@ -323,37 +323,9 @@ Please refer to the project's style and contribution guidelines for submitting p
 
 2. **Environment Setup**
 
-    - Create a `.env` file in the `server` directory:
+    - Create a `.env` file in the `server` directory and copy the contents of the .env.sample file
 
-    ```env
-    # Server Configuration
-    PORT=3001
-    NODE_ENV=development
-
-    # Database (for future implementation)
-    DATABASE_URL="postgresql://username:password@localhost:5432/xangoes_db"
-
-    # Firebase Admin SDK (for future implementation)
-    FIREBASE_PROJECT_ID="your-project-id"
-    FIREBASE_PRIVATE_KEY="your-private-key"
-    FIREBASE_CLIENT_EMAIL="your-client-email"
-
-    # JWT Secret (for future implementation)
-    JWT_SECRET="your-jwt-secret-key"
-    ```
-
-    - Create a `.env.local` file in the `client` directory:
-
-    ```env
-    # API Endpoints
-    NEXT_PUBLIC_API_URL=http://localhost:3001
-    NEXT_PUBLIC_GRAPHQL_URL=http://localhost:3001/graphql
-
-    # Firebase Config (for future implementation)
-    NEXT_PUBLIC_FIREBASE_API_KEY="your-api-key"
-    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your-auth-domain"
-    NEXT_PUBLIC_FIREBASE_PROJECT_ID="your-project-id"
-    ```
+    - Create a `.env.local` file in the `client` directory  copy the contents of the .env.sample file
 
 3. **Running the Application**
 
