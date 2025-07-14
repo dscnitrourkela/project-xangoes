@@ -16,6 +16,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "AYANscyy2",
+      "name": "Ayan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/180634057?v=4",
+      "profile": "https://portfolioscyy.netlify.app/playground",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
