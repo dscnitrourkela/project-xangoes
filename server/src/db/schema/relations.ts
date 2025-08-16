@@ -1,23 +1,19 @@
-import { relations } from "drizzle-orm";
+import { relations } from 'drizzle-orm';
 
-import { clubs } from "./club";
-import { events } from "./event";
-import { eventRegistrations } from "./eventRegistration";
-import { fests } from "./fest";
-import { institutes } from "./institute";
-import { teams } from "./team";
-import { transactions } from "./transaction";
-import { users } from "./user";
+import { clubs } from './club';
+import { events } from './event';
+import { eventRegistrations } from './eventRegistration';
+import { fests } from './fest';
+import { institutes } from './institute';
+import { teams } from './team';
+import { transactions } from './transaction';
+import { users } from './user';
 
 // User relations
 export const userRelations = relations(users, ({ one, many }) => ({
     institute: one(institutes, {
         fields: [users.college],
         references: [institutes.id],
-    }),
-    referrer: one(users, {
-        fields: [users.referredBy],
-        references: [users.id],
     }),
     transactions: many(transactions),
     eventRegistrations: many(eventRegistrations),

@@ -1,0 +1,1 @@
+ALTER TABLE "users" ALTER COLUMN "fest_id" SET DATA TYPE text;
