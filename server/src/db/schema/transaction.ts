@@ -23,8 +23,8 @@ export const transactions = pgTable("transactions", {
     timestamp: timestamp("timestamp").notNull().defaultNow(),
     festID: varchar("fest_id", { length: 255 }), // References fest.id
     comment: text("comment"),
-    screenshot: text("screenshot"),
-    isVerified: boolean("is_verified").default(false),
+    screenshot: text("screenshot"), // optional if payment gateway is used
+    isVerified: boolean("is_verified").default(false), // if payment gateway is used
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
