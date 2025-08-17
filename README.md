@@ -1,6 +1,6 @@
 [![Starware](https://img.shields.io/badge/Starware-⭐-black?labelColor=f9b00d)](https://github.com/zepfietje/starware)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Contributors][contributors-shield]][contributors-url]
@@ -410,6 +410,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://ayussh.vercel.app/"><img src="https://avatars.githubusercontent.com/u/135319056?v=4?s=100" width="100px;" alt="Ayush"/><br /><sub><b>Ayush</b></sub></a><br /><a href="https://github.com/dscnitrourkela/project-xangoes/commits?author=ayussh-2" title="Code">💻</a> <a href="https://github.com/dscnitrourkela/project-xangoes/commits?author=ayussh-2" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://portfolioscyy.netlify.app/playground"><img src="https://avatars.githubusercontent.com/u/180634057?v=4?s=100" width="100px;" alt="Ayan"/><br /><sub><b>Ayan</b></sub></a><br /><a href="https://github.com/dscnitrourkela/project-xangoes/commits?author=AYANscyy2" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/BlessedAmrita"><img src="https://avatars.githubusercontent.com/u/153388147?v=4?s=100" width="100px;" alt="BlessedAmrita"/><br /><sub><b>BlessedAmrita</b></sub></a><br /><a href="https://github.com/dscnitrourkela/project-xangoes/issues?q=author%3ABlessedAmrita" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
