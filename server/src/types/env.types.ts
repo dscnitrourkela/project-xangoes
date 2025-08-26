@@ -5,4 +5,6 @@ export interface EnvConfig {
     PORT: number;
     // Database Configuration
     DATABASE_URL: string;
+    RATE_LIMIT: number;
+    RATE_LIMIT_WINDOW: number;
 }

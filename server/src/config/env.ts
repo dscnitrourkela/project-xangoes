@@ -34,6 +34,9 @@ export const env: EnvConfig = {
     PORT: parseEnv(process.env.PORT, 3000, parseInt),
     // Database Configuration
     DATABASE_URL: requireEnv("DATABASE_URL"),
+    // Rate Limiting Configuration
+    RATE_LIMIT: parseEnv(process.env.RATE_LIMIT, 100, parseInt),
+    RATE_LIMIT_WINDOW: parseEnv(process.env.RATE_LIMIT_WINDOW, 60, parseInt),
 };
 
 // Validation function for critical environment variables
