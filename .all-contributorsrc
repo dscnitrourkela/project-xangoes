@@ -52,6 +52,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "Abimanyu-A",
+      "name": "Abimanyu A",
+      "avatar_url": "https://avatars.githubusercontent.com/u/154288841?v=4",
+      "profile": "https://github.com/Abimanyu-A",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
