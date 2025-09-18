@@ -1,3 +1,4 @@
+import "aos/dist/aos.css";
 import type { Metadata } from "next";
 import "./globals.css";
 
