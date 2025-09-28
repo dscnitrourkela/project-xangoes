@@ -1,5 +1,10 @@
-import type { Metadata } from "next";
 import "./globals.css";
+
+import type { Metadata } from "next";
+
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { geist, inter } from "@/fonts";
 
 export const metadata: Metadata = {
     title: "Project Xangoes",
@@ -12,8 +17,18 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body>{children}</body>
+        <html lang="en" suppressHydrationWarning>
+            <body className={`${geist.variable} ${inter.variable} antialiased`}>
+                <ThemeProvider
+                    defaultTheme="system"
+                    storageKey="project-xangoes-theme"
+                >
+                    {children}
+                    <div className="fixed top-4 right-4 z-50">
+                        <ThemeToggle />
+                    </div>
+                </ThemeProvider>
+            </body>
         </html>
     );
 }
