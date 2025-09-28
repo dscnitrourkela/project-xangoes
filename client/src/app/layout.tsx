@@ -20,13 +20,15 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <body className={`${geist.variable} ${inter.variable} antialiased`}>
                 <ThemeProvider
+                    attribute="class"
                     defaultTheme="system"
-                    storageKey="project-xangoes-theme"
+                    enableSystem
+                    disableTransitionOnChange
                 >
-                    {children}
                     <div className="fixed top-4 right-4 z-50">
                         <ThemeToggle />
                     </div>
+                    {children}
                 </ThemeProvider>
             </body>
         </html>
