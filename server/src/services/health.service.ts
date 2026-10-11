@@ -1,5 +1,7 @@
+import { checkDbConnection } from '@/db/schema';
+
 /**
- * @description Health service to check the health of the server
+ * @description Health service to check the health of the server and database
  */
 class HealthService {
     /**
@@ -18,6 +20,19 @@ class HealthService {
             name: "Xangoes API",
             version: "1.0.0",
             maintainer: "DSC NITR",
+        };
+    }
+
+    /**
+     * @description Check database connection health
+     */
+    public async getDatabaseHealth() {
+        const check = await checkDbConnection();
+        return {
+            status: check.isHealthy ? "healthy" : "unhealthy",
+            database: "postgresql",
+            latencyMs: check.latencyMs,
+            ...(check.error ? { error: check.error } : {}),
         };
     }
 }

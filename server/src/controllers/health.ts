@@ -3,9 +3,19 @@ import { Context } from 'hono';
 import { sendSuccess } from '@/middlewares';
 import { healthService } from '@/services/health.service';
 
-const { getHealth } = healthService;
 export const healthController = {
     getHealth: async (c: Context) => {
-        return sendSuccess(c, getHealth());
+        return sendSuccess(c, healthService.getHealth());
+    },
+
+    getDbHealth: async (c: Context) => {
+        const dbHealth = await healthService.getDatabaseHealth();
+        const statusCode = dbHealth.status === 'healthy' ? 200 : 503;
+        return sendSuccess(
+            c,
+            dbHealth,
+            dbHealth.status === 'healthy' ? 'Database is healthy' : 'Database connection error',
+            statusCode
+        );
     },
 };
