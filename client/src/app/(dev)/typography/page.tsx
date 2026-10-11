@@ -96,10 +96,10 @@ export default function Page() {
                     <P>Special formatting for quoted content.</P>
 
                     <Blockquote className="mt-4">
-                        "This is a blockquote example. It provides special
+                        &ldquo;This is a blockquote example. It provides special
                         styling for quoted text with left border and italic
                         formatting. Perfect for highlighting important
-                        statements or citations."
+                        statements or citations.&rdquo;
                     </Blockquote>
                 </section>
 
@@ -116,7 +116,7 @@ export default function Page() {
                         <H4>Responsive Example</H4>
                         <P>
                             Resize your browser window to see how the H1 heading
-                            above changes size. The system uses Tailwind's
+                            above changes size. The system uses Tailwind&apos;s
                             responsive prefixes (sm:, md:, lg:, xl:) to provide
                             optimal readability across devices.
                         </P>
