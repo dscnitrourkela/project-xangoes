@@ -1,2 +1,3 @@
-export * from "./health";
-export * from "../middlewares/validators/test";
+export * from './health';
+export * from './test';
+export * from './storage';
