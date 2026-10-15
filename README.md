@@ -142,8 +142,8 @@ project-xangoes/
 -   **[Bun](https://bun.sh/)** - Fast JavaScript runtime and package manager
 -   **[Hono](https://hono.dev/)** - Lightweight, fast web framework for the Edge
 -   **[TypeScript](https://www.typescriptlang.org/)** - Type-safe backend development
--   **[PostgreSQL](https://www.postgresql.org/)** - Relational database for structured data (planned)
--   **[Drizzle ORM](https://orm.drizzle.team/)** - Type-safe database ORM (planned for future implementation)
+-   **[PostgreSQL](https://www.postgresql.org/)** - Relational database for structured data
+-   **[Drizzle ORM](https://orm.drizzle.team/)** - Type-safe database ORM
 
 ### APIs & Validation
 
@@ -245,7 +245,7 @@ The API implements comprehensive error handling with:
 #### Health Check
 
 -   `GET /health` - Basic health check
--   `GET /health/detailed` - Detailed system health information
+-   `GET /health/db` - PostgreSQL probe (`SELECT 1`)
 
 #### Test Endpoints _(Development)_
 
@@ -361,8 +361,8 @@ Please refer to the project's style and contribution guidelines for submitting p
     # Health check
     curl http://localhost:3001/health
 
-    # Detailed health check
-    curl http://localhost:3001/health/detailed
+    # Database health check
+    curl http://localhost:3001/health/db
 
     # Test endpoint
     curl http://localhost:3001/test

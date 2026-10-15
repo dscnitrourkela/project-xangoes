@@ -75,6 +75,11 @@ server/
 │   │   ├── health.ts            # Health check controller
 │   │   └── test.ts              # Test/demo controller
 │   │
+│   ├── db/                       # Drizzle client, schema, and seed
+│   │   ├── schema.ts            # PostgreSQL pool + drizzle instance
+│   │   ├── seed.ts              # Dev-only seed data
+│   │   └── schema/              # Table, relation, and Zod definitions
+│   │
 │   ├── routes/                   # Route definitions layer
 │   │   ├── index.ts             # Route exports
 │   │   ├── health.ts            # Health check routes
@@ -112,8 +117,8 @@ server/
 
 ### Database & ORM
 
--   **[PostgreSQL](https://www.postgresql.org/)** - Relational database for structured data (planned)
--   **[Drizzle ORM](https://orm.drizzle.team/)** - Type-safe database ORM (planned for future implementation)
+-   **[PostgreSQL](https://www.postgresql.org/)** - Relational database for structured data
+-   **[Drizzle ORM](https://orm.drizzle.team/)** - Type-safe database ORM
 
 ### Validation & Types
 
@@ -126,16 +131,17 @@ server/
 
 ## Database Schema
 
-Project Xangoes uses a comprehensive database schema with **8 core entities** designed to manage college fests, events, and user interactions:
+Project Xangoes uses a comprehensive database schema with **9 core entities** designed to manage college fests, events, and user interactions:
 
 -   **User** - Participants, organizers, and students
 -   **Fest** - Main festival/event management
 -   **Club** - Organizing bodies and societies
+-   **ClubMember** - Club staff membership and role
 -   **Event** - Individual competitions and activities
 -   **Institute** - Educational institutions
--   **Transaction** - Payment and financial records
+-   **Transaction** - Payment records (Razorpay by default)
 -   **EventRegistration** - User-event participation tracking
--   **Team** - User-club membership management
+-   **Team** - Event participation teams (lead + members)
 
 For detailed database schema documentation, entity relationships, field specifications, and implementation guidelines, please refer to:
 
@@ -227,7 +233,7 @@ All API responses follow a standardized format for consistency:
 #### Health Check Endpoints
 
 -   `GET /health` - Basic health check
--   `GET /health/detailed` - Detailed system health information
+-   `GET /health/db` - PostgreSQL probe (`SELECT 1`)
 
 #### Test Endpoints _(For Understanding Code Flow)_
 
@@ -243,7 +249,7 @@ All API responses follow a standardized format for consistency:
 Ensure you have the following installed on your system:
 
 -   **[Bun](https://bun.sh/)** (latest version) - **Required** runtime and package manager
--   **[PostgreSQL](https://www.postgresql.org/)** (v14 or higher) _(for future database integration)_
+-   **[PostgreSQL](https://www.postgresql.org/)** (v14 or higher)
 -   **[Git](https://git-scm.com/)** - Version control
 
 ### Installation & Setup
@@ -282,9 +288,25 @@ Ensure you have the following installed on your system:
     bun run start
     ```
 
-3. **Server Information**
+3. **Database**
+
+    ```bash
+    # Generate SQL from src/db/schema (after schema changes)
+    bun run db:generate
+
+    # Apply migrations to the database in DATABASE_URL (local/dev only)
+    bun run db:migrate
+
+    # Dev-only seed: 1 fest, 2 clubs, 5 events, 10 users
+    bun run db:seed
+    ```
+
+    Schema details, ERD, payment fields, and constraints: **[DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md)**.
+
+4. **Server Information**
     - Server URL: `http://localhost:5000`
     - Health Check: `http://localhost:5000/health`
+    - Database Health: `http://localhost:5000/health/db`
     - Test Documentation: `http://localhost:5000/test`
 
 ## Development Guidelines
