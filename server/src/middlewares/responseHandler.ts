@@ -6,6 +6,17 @@ import {
 } from '@/types';
 
 /**
+ * Helper to safely extract requestId from context
+ */
+function getRequestId(c: Context): string | undefined {
+    try {
+        return c.get('requestId') || c.req.header('x-request-id');
+    } catch {
+        return undefined;
+    }
+}
+
+/**
  * Success response handler for standardized API responses
  */
 export class ResponseHandler {
@@ -27,6 +38,7 @@ export class ResponseHandler {
             success: true,
             message,
             data,
+            requestId: getRequestId(c),
             timestamp: new Date().toISOString(),
         };
 
@@ -45,20 +57,20 @@ export class ResponseHandler {
         data?: T,
         message: string = "Resource created successfully"
     ): Response {
-        return this.success(c, data, message, 201);
+        return ResponseHandler.success(c, data, message, 201);
     }
 
     /**
      * Send a no content response (204)
+     * Note: HTTP 204 No Content specifications state that no message-body should be returned.
      * @param c - Hono context
-     * @param message - Success message
-     * @returns JSON response
+     * @returns Empty Response
      */
     static noContent(
         c: Context,
-        message: string = "Operation completed successfully"
+        _message: string = "Operation completed successfully"
     ): Response {
-        return this.success(c, undefined, message, 204);
+        return c.body(null, 204);
     }
 
     /**
@@ -91,6 +103,7 @@ export class ResponseHandler {
                 total,
                 totalPages,
             },
+            requestId: getRequestId(c),
             timestamp: new Date().toISOString(),
         };
 
@@ -114,7 +127,10 @@ export class ResponseHandler {
         const response: ApiResponse = {
             success: false,
             message,
-            error: process.env.NODE_ENV === "development" ? error : undefined,
+            error: process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test" || statusCode < 500
+                ? error
+                : undefined,
+            requestId: getRequestId(c),
             timestamp: new Date().toISOString(),
         };
 
@@ -125,8 +141,13 @@ export class ResponseHandler {
 /**
  * Convenience methods for common responses
  */
-export const sendSuccess = ResponseHandler.success;
-export const sendCreated = ResponseHandler.created;
-export const sendNoContent = ResponseHandler.noContent;
-export const sendPaginated = ResponseHandler.paginated;
-export const sendError = ResponseHandler.error;
+export const sendSuccess = (c: Context, data?: any, message?: string, statusCode?: number) =>
+    ResponseHandler.success(c, data, message, statusCode);
+export const sendCreated = (c: Context, data?: any, message?: string) =>
+    ResponseHandler.created(c, data, message);
+export const sendNoContent = (c: Context, message?: string) =>
+    ResponseHandler.noContent(c, message);
+export const sendPaginated = (c: Context, data: any[], page: number, limit: number, total: number, message?: string) =>
+    ResponseHandler.paginated(c, data, page, limit, total, message);
+export const sendError = (c: Context, message: string, statusCode?: number, error?: any) =>
+    ResponseHandler.error(c, message, statusCode, error);

@@ -17,7 +17,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
     }),
     transactions: many(transactions),
     eventRegistrations: many(eventRegistrations),
-    teamMemberships: many(teams),
+    leadTeams: many(teams),
 }));
 
 // Fest relations
@@ -74,8 +74,8 @@ export const eventRegistrationRelations = relations(
 
 // Team relations
 export const teamRelations = relations(teams, ({ one }) => ({
-    user: one(users, {
-        fields: [teams.userID],
+    teamLeader: one(users, {
+        fields: [teams.teamLead],
         references: [users.id],
     }),
     club: one(clubs, {

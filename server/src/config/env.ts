@@ -1,63 +1,92 @@
-import type { EnvConfig } from "@/types";
+import dotenv from 'dotenv';
+import { z } from 'zod';
+import type { EnvConfig } from '@/types';
 
-// Helper function to parse environment variables with type conversion
-function parseEnv<T>(
-    value: string | undefined,
-    defaultValue: T,
-    parser?: (val: string) => T
-): T {
-    if (!value) return defaultValue;
+// Load environment variables from .env if present
+dotenv.config();
 
-    if (parser) {
-        try {
-            return parser(value);
-        } catch {
-            return defaultValue;
+const envSchema = z.object({
+    PORT: z
+        .string()
+        .optional()
+        .default('3000')
+        .transform((val) => parseInt(val, 10))
+        .pipe(z.number().positive()),
+    NODE_ENV: z
+        .enum(['development', 'production', 'test'])
+        .default('development'),
+    DATABASE_URL: z
+        .string()
+        .min(1, 'DATABASE_URL is required'),
+    RATE_LIMIT: z
+        .string()
+        .optional()
+        .default('100')
+        .transform((val) => parseInt(val, 10))
+        .pipe(z.number().positive()),
+    RATE_LIMIT_WINDOW: z
+        .string()
+        .optional()
+        .default('60')
+        .transform((val) => parseInt(val, 10))
+        .pipe(z.number().positive()),
+    GOOGLE_CLIENT_ID: z
+        .string()
+        .min(1, 'GOOGLE_CLIENT_ID is required'),
+    GOOGLE_CLIENT_SECRET: z
+        .string()
+        .min(1, 'GOOGLE_CLIENT_SECRET is required'),
+    GOOGLE_REDIRECT_URI: z
+        .string()
+        .min(1, 'GOOGLE_REDIRECT_URI is required')
+        .url('GOOGLE_REDIRECT_URI must be a valid URL'),
+});
+
+let parsedEnv: EnvConfig;
+
+/**
+ * Validates environment variables and provides structured startup errors.
+ */
+export function validateEnv(): EnvConfig {
+    const result = envSchema.safeParse(process.env);
+
+    if (!result.success) {
+        console.error('❌ Environment validation failed with the following errors:');
+        for (const issue of result.error.issues) {
+            const path = issue.path.join('.') || 'Root';
+            console.error(`  - [${path}]: ${issue.message}`);
         }
-    }
-
-    return value as T;
-}
-
-// Helper function to validate required environment variables
-function requireEnv(key: string): string {
-    const value = process.env[key];
-    if (!value) {
-        throw new Error(`Required environment variable ${key} is not defined`);
-    }
-    return value;
-}
-
-// Environment configuration object
-export const env: EnvConfig = {
-    // Server Configuration
-    PORT: parseEnv(process.env.PORT, 3000, parseInt),
-    // Database Configuration
-    DATABASE_URL: requireEnv("DATABASE_URL"),
-    // Rate Limiting Configuration
-    RATE_LIMIT: parseEnv(process.env.RATE_LIMIT, 100, parseInt),
-    RATE_LIMIT_WINDOW: parseEnv(process.env.RATE_LIMIT_WINDOW, 60, parseInt),
-};
-
-// Validation function for critical environment variables
-export function validateEnv(): void {
-    const errors: string[] = [];
-
-    const requiredVars: string[] = [];
-
-    for (const varName of requiredVars) {
-        try {
-            requireEnv(varName);
-        } catch (error) {
-            errors.push((error as Error).message);
+        if (process.env.NODE_ENV !== 'test') {
+            process.exit(1);
         }
+        throw new Error(
+            `Environment validation failed:\n` +
+            result.error.issues.map((i) => `  - ${i.path.join('.')}: ${i.message}`).join('\n')
+        );
     }
 
-    if (errors.length > 0) {
-        console.error("Environment validation failed:");
-        errors.forEach((error) => console.error(`  - ${error}`));
-        process.exit(1);
-    }
+    parsedEnv = result.data as EnvConfig;
+    return parsedEnv;
 }
+
+// Initialise lazy-evaluated env accessor so imports don't crash before test setup or validateEnv
+export const env: EnvConfig = new Proxy({} as EnvConfig, {
+    get(_target, prop: keyof EnvConfig) {
+        if (!parsedEnv) {
+            const result = envSchema.safeParse(process.env);
+            if (result.success) {
+                parsedEnv = result.data as EnvConfig;
+            } else {
+                // Return reasonable fallback if accessing in test or early load
+                if (prop === 'PORT') return parseInt(process.env.PORT || '3000', 10);
+                if (prop === 'NODE_ENV') return process.env.NODE_ENV || 'development';
+                if (prop === 'RATE_LIMIT') return parseInt(process.env.RATE_LIMIT || '100', 10);
+                if (prop === 'RATE_LIMIT_WINDOW') return parseInt(process.env.RATE_LIMIT_WINDOW || '60', 10);
+                return (process.env as Record<string, any>)[prop as string] || '';
+            }
+        }
+        return parsedEnv[prop];
+    },
+});
 
 export default env;

@@ -3,9 +3,13 @@
         "strict": true,
         "jsx": "react-jsx",
         "jsxImportSource": "hono/jsx",
-        "baseUrl": ".",
+        "moduleResolution": "bundler",
+        "target": "ES2022",
+        "module": "ESNext",
+        "skipLibCheck": true,
         "paths": {
-            "@/*": ["src/*"]
+            "@/*": ["./src/*"]
         }
-    }
+    },
+    "include": ["src/**/*", "test/**/*"]
 }
