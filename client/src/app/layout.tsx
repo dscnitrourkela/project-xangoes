@@ -1,9 +1,10 @@
+import "@/lib/storage";
 import "./globals.css";
 
 import type { Metadata } from "next";
 
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { AuthProvider } from "@/context/auth-context";
 import { geist, inter } from "@/fonts";
 
 export const metadata: Metadata = {
@@ -25,10 +26,9 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <div className="fixed top-4 right-4 z-50">
-                        <ThemeToggle />
-                    </div>
-                    {children}
+                    <AuthProvider>
+                        {children}
+                    </AuthProvider>
                 </ThemeProvider>
             </body>
         </html>

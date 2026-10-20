@@ -1,4 +1,3 @@
-import { serve } from '@hono/node-server';
 import app from './app';
 import {
   env,
@@ -8,15 +7,9 @@ import {
 // Validate environment variables on startup
 validateEnv();
 
-const port = env.PORT || 5000;
+const server = {
+    port: env.PORT,
+    fetch: app.fetch,
+};
 
-console.log(`🚀 Server starting on http://localhost:${port}`);
-
-serve({
-  fetch: app.fetch,
-  port: port,
-}, (info) => {
-  console.log(`✅ Server is live at http://localhost:${info.port}`);
-});
-
-export default app;
+export default server;

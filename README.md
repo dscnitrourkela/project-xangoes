@@ -1,426 +1,313 @@
-[![Starware](https://img.shields.io/badge/Starware-⭐-black?labelColor=f9b00d)](https://github.com/zepfietje/starware)
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+# Project Xangoes
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
+A unified, modern full-stack management system for college fests and events at NIT Rourkela, built to streamline event registration, festival operations, payment audits, and participant management.
 
-<br />
-<p align="center">
-  <a href="#">
-    <!-- <img src="public/screenshot.png" alt="Logo" width="800"> -->
-  </a>
+Developed with ❤️ by **[DSC NIT Rourkela](https://dscnitrourkela.org)**.
 
-  <h3 align="center">Project Xangoes</h3>
+---
 
-  <p align="center">
-    A comprehensive full-stack system for managing college fests and events, designed to centralize event management, registration handling, and transaction tracking for educational institutions.
-  </p>
-</p>
+## Table of Contents
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#key-features">Key Features</a></li>
-        <li><a href="#architecture-overview">Architecture Overview</a></li>
-        <li><a href="#project-structure">Project Structure</a></li>
-      </ul>
-    </li>
-    <li><a href="#built-with">Built With</a></li>
-    <li><a href="#rest-api-flow">REST API Flow</a></li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#contribution-guidlines">Contribution guidlines</a></li>
-        <li><a href="#local-repository-setup">Local Repository Setup</a></li>
-        <li><a href="#running-the-project">Running the project</a></li>
-      </ul>
-    </li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#dsc-nit-rourkela">DSC NIT Rourkela</a></li>
-    <li><a href="#starware">Starware</a></li>
-  </ol>
-</details>
+- [About The Project](#about-the-project)
+- [System Architecture](#system-architecture)
+- [Monorepo Directory Structure](#monorepo-directory-structure)
+- [Tech Stack](#tech-stack)
+- [Standardized API Response Envelope](#standardized-api-response-envelope)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Local Setup](#local-setup)
+  - [Running the Client](#running-the-client)
+  - [Running the Server](#running-the-server)
+- [Available Scripts](#available-scripts)
+- [Environment Variables](#environment-variables)
+- [API Endpoints Summary](#api-endpoints-summary)
+- [Design Guidelines](#design-guidelines)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
 
 ## About The Project
 
-Project Xangoes is a modern, scalable full-stack system designed to streamline the management of college festivals and their associated events. Built to replace and enhance the existing project-dates system, it provides a unified platform for fest organizers, event managers, and participants.
+Project Xangoes provides a centralized platform for college festival organizers, clubs, participants, and institute administrators:
 
-### Key Features
+- **Centralized Fest Operations**: Create, schedule, and oversee annual flagship fests (Innovision, Nitrutsav, ISM).
+- **Club Events Catalog**: Organize technical, robotics, and cultural competitions with prize pools and POC coordinators.
+- **Participant Registrations**: Streamlined user account creation, team formations, and roll number verifications.
+- **Payment & Transaction Auditing**: External UPI/gateway payment tracking, screenshot receipt audit, and fee verification.
+- **Role-Based Access Control**: Clean role gating separating regular participants (`user`), fest coordinators (`admin`), and institute leadership (`super_admin`).
 
--   **Centralized Management**: Unified dashboard for complete fest control and management
--   **Event & Registration Handling**: Easy creation, modification, and tracking of events with detailed participant management
--   **Transaction Tracking**: Secure payment processing with verification capabilities and receipt management
--   **Flexible Architecture**: Modern tech stack ensuring scalability and maintainability
--   **Developer-friendly API**: RESTful API design with standardized response format and comprehensive error handling
--   **Type Safety**: Full TypeScript implementation with Zod validation for robust data handling
+---
 
-### Architecture Overview
+## System Architecture
 
-The system follows a modern full-stack architecture:
+Project Xangoes is architected into two focused modules:
 
--   **REST APIs** for all operations including authentication, user management, event operations, and payment processing
--   **GraphQL APIs** will be added in future iterations for complex data queries and real-time operations
--   **Microservices-ready**: Modular design allows for easy service extraction and scaling
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Project Xangoes                          │
+├──────────────────────────────┬──────────────────────────────┤
+│      client/ (Frontend)      │      server/ (Backend API)   │
+│                              │                              │
+│ • Next.js 15 (App Router)    │ • Hono HTTP Framework        │
+│ • React 19 + TypeScript      │ • Bun / Node.js + TypeScript │
+│ • Tailwind CSS v4            │ • Drizzle ORM + PostgreSQL   │
+│ • Zod Form Validation        │ • Zod Schema Validation      │
+│ • Typed Fetch API Client     │ • Sliding-Window Rate Limit  │
+│ • Role-Aware AppShell        │ • Standard Response Envelope │
+│ • Collapsible Admin Portal   │ • 4-Layer Service Flow       │
+└──────────────────────────────┴──────────────────────────────┘
+```
 
-### Project Structure
+---
+
+## Monorepo Directory Structure
 
 ```
 project-xangoes/
-├── client/                     # Frontend Next.js application
+├── client/                     # Next.js 15 Frontend
+│   ├── public/                 # Static assets and icons
 │   ├── src/
-│   │   └── app/               # Next.js App Router
-│   │       ├── globals.css    # Global styles
-│   │       ├── layout.tsx     # Root layout component
-│   │       └── page.tsx       # Home page
-│   ├── public/                # Static assets
+│   │   ├── app/
+│   │   │   ├── (auth)/         # Public auth route group
+│   │   │   │   ├── login/      # Sign-in page with role redirect
+│   │   │   │   └── sign-up/    # Registration page
+│   │   │   ├── (dev)/          # Developer design verification
+│   │   │   │   ├── playground/ # Component playground
+│   │   │   │   └── typography/ # Geist Sans typography hierarchy
+│   │   │   ├── (home)/         # Main public landing page
+│   │   │   ├── admin/          # Protected Admin Dashboard
+│   │   │   │   ├── layout.tsx  # Role guard & responsive sidebar
+│   │   │   │   ├── page.tsx    # Admin overview dashboard
+│   │   │   │   ├── fests/      # Fest management catalog
+│   │   │   │   ├── events/     # Events catalog & prize pools
+│   │   │   │   ├── registrations/ # Student registry & CSV export
+│   │   │   │   └── transactions/  # Payment verification audit
+│   │   │   ├── api/auth/       # Next.js route handlers
+│   │   │   │   ├── login/route.ts
+│   │   │   │   ├── sign-up/route.ts
+│   │   │   │   └── me/route.ts
+│   │   │   ├── globals.css     # Tailwind v4 theme & CSS tokens
+│   │   │   └── layout.tsx      # Root layout (Theme & Auth providers)
+│   │   ├── components/
+│   │   │   ├── admin/          # Admin sidebar and topbar
+│   │   │   ├── layout/         # Role-aware AppShell & mobile nav
+│   │   │   └── ui/             # Reusable UI primitives (Button, Card, Input, Badge, Typography)
+│   │   ├── context/            # AuthProvider & useAuth hook
+│   │   ├── fonts/              # Geist Sans and Inter configurations
+│   │   ├── lib/                # Typed API client wrapper & cn utils
+│   │   └── types/              # ApiResponse envelope & Zod schemas
+│   ├── DESIGN.md               # Source of truth for client design & typography
 │   ├── package.json
-│   ├── next.config.ts         # Next.js configuration
-│   └── tsconfig.json         # TypeScript configuration
+│   └── tsconfig.json
 │
-├── server/                    # Backend Hono application
+├── server/                     # Hono Backend API
+│   ├── drizzle/                # SQL migration files
 │   ├── src/
-│   │   ├── app.ts            # Main Hono app instance and middleware setup
-│   │   ├── index.ts          # Server entry point
-│   │   │
-│   │   ├── config/           # Configuration files
-│   │   │   └── env.ts        # Environment variable validation (Zod)
-│   │   │
-│   │   ├── controllers/      # Request handlers and business logic
-│   │   │   ├── health.ts     # Health check endpoints
-│   │   │   ├── text.ts       # Text processing endpoints
-│   │   │   └── index.ts      # Controller exports
-│   │   │
-│   │   ├── middlewares/      # Custom Hono middlewares
-│   │   │   ├── asyncHandler.ts     # Wraps async handlers for error catching
-│   │   │   ├── errorHandler.ts     # Global error handling
-│   │   │   ├── responseHandler.ts  # Standardized response formatting
-│   │   │   ├── schemaValidator.ts  # Zod schema validation
-│   │   │   └── validators/         # Custom validation logic
-│   │   │
-│   │   ├── routes/           # API route definitions
-│   │   │   ├── health.ts     # Health check routes
-│   │   │   ├── test.ts       # Test/demo routes
-│   │   │   └── index.ts      # Route exports
-│   │   │
-│   │   ├── services/         # Business logic services
-│   │   │   └── health.service.ts
-│   │   │
-│   │   └── types/            # TypeScript type definitions
-│   │       ├── env.types.ts  # Environment variable types
-│   │       └── index.ts      # Type exports
-│   │
+│   │   ├── app.ts              # Hono app configuration & middleware
+│   │   ├── index.ts            # Server entry point
+│   │   ├── config/             # Environment validation (env.ts)
+│   │   ├── controllers/        # HTTP handlers (auth, health, test)
+│   │   ├── db/
+│   │   │   ├── schema/         # Drizzle table schemas (10 entities)
+│   │   │   └── schema.ts       # Database client
+│   │   ├── middlewares/        # asyncHandler, rateLimit, responseHandler, schemaValidator
+│   │   ├── routes/             # Route modules (auth, health, test)
+│   │   ├── services/           # Business logic (auth, health, test)
+│   │   └── types/              # Server envelope & config types
+│   ├── .env.sample             # Backend env template
+│   ├── drizzle.config.ts       # Drizzle Kit migration config
 │   ├── package.json
-│   ├── tsconfig.json
-│   ├── AUTH_FLOW.md          # Authentication flow documentation
-│   ├── DATABASE_SCHEMA.md    # Database schema documentation
-│   └── README.md             # Server-specific documentation
+│   ├── README.md               # Backend specific documentation
+│   └── tsconfig.json
 │
-├── README.md                 # Project documentation
-└── LICENSE                   # MIT License
+├── .github/                    # Issue templates and workflows
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── LICENSE
+└── README.md                   # Root documentation
 ```
 
-## Built With
+---
 
-### Frontend
+## Tech Stack
 
--   **[Next.js](https://nextjs.org/)** - React framework with App Router for server-side rendering and static site generation
--   **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript development
--   **[React](https://reactjs.org/)** - Frontend library for building user interfaces
--   **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework (configured)
+### Client
+- **Framework**: [Next.js](https://nextjs.org/) 15.3 (App Router)
+- **Library**: [React](https://react.dev/) 19 & TypeScript 5
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) v4 & [tw-animate-css](https://www.npmjs.com/package/tw-animate-css)
+- **Component Primitives**: [Radix UI](https://www.radix-ui.com/) (Dropdown Menu, Slot)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Validation**: [Zod](https://zod.dev/)
+- **Theme**: [next-themes](https://github.com/pacocoursey/next-themes) (Light / Dark mode support)
 
-### Backend
+### Server
+- **Framework**: [Hono](https://hono.dev/) v4.8 (High-speed edge & Node framework)
+- **Runtime**: [Bun](https://bun.sh/) / [Node.js](https://nodejs.org/) with `tsx`
+- **Database & ORM**: [PostgreSQL](https://www.postgresql.org/) & [Drizzle ORM](https://orm.drizzle.team/)
+- **Validation**: [Zod](https://zod.dev/) v4
+- **Database Driver**: `pg`
 
--   **[Bun](https://bun.sh/)** - Fast JavaScript runtime and package manager
--   **[Hono](https://hono.dev/)** - Lightweight, fast web framework for the Edge
--   **[TypeScript](https://www.typescriptlang.org/)** - Type-safe backend development
--   **[PostgreSQL](https://www.postgresql.org/)** - Relational database for structured data
--   **[Drizzle ORM](https://orm.drizzle.team/)** - Type-safe database ORM
+---
 
-### APIs & Validation
+## Standardized API Response Envelope
 
--   **[Zod](https://zod.dev/)** - TypeScript-first schema validation with runtime type checking
--   **REST APIs** - RESTful architecture with standardized response format
--   **[GraphQL](https://graphql.org/)** - Query language for flexible data fetching _(coming soon)_
+Both the frontend API client and the backend server adhere to the standardized response envelope:
 
-### Authentication & Services
-
--   **[Firebase Admin SDK](https://firebase.google.com/docs/admin/setup)** - Backend authentication and user management (planned)
-
-### Development Tools
-
--   **[ESLint](https://eslint.org/)** - JavaScript/TypeScript linting
--   **[PostCSS](https://postcss.org/)** - CSS processing
--   **[Postman](https://www.postman.com/)** - API testing and documentation
-
-## REST API Flow
-
-The backend follows a structured REST API pattern with comprehensive error handling and standardized responses.
-
-### Request-Response Flow
-
-```mermaid
-graph TD
-    A[Client Request] --> B[Route Handler]
-    B --> C[Schema Validation]
-    C --> D{Valid?}
-    D -->|No| E[Validation Error Response]
-    D -->|Yes| F[Async Handler Wrapper]
-    F --> G[Controller Logic]
-    G --> H[Service Layer]
-    H --> I[Database Operations]
-    I --> J[Response Handler]
-    J --> K[Standardized JSON Response]
-
-    G -->|Error| L[Error Handler]
-    L --> M[Error Response]
-
-    E --> N[Client]
-    K --> N
-    M --> N
-```
-
-### API Response Format
-
-All API responses follow a standardized format:
-
-#### Success Response
-
-```json
-{
-  "success": true,
-  "message": "Operation successful",
-  "data": { ... },
-  "timestamp": "2024-01-01T00:00:00.000Z"
+```typescript
+export interface ApiResponse<T = unknown> {
+    success: boolean;
+    message: string;
+    data?: T;
+    error?: string | Array<{ field: string; message: string }> | unknown;
+    timestamp: string;
 }
 ```
 
-#### Error Response
-
-```json
-{
-    "success": false,
-    "message": "Error description",
-    "error": "Additional error details (development only)",
-    "timestamp": "2024-01-01T00:00:00.000Z"
-}
-```
-
-#### Paginated Response
-
-```json
-{
-  "success": true,
-  "message": "Data retrieved successfully",
-  "data": [...],
-  "pagination": {
-    "page": 1,
-    "limit": 10,
-    "total": 100,
-    "totalPages": 10
-  },
-  "timestamp": "2024-01-01T00:00:00.000Z"
-}
-```
-
-### Error Handling
-
-The API implements comprehensive error handling with:
-
--   **Async Handler**: Automatically catches and forwards errors from async route handlers
--   **Custom Error Classes**: Structured error creation with appropriate HTTP status codes
--   **Global Error Handler**: Centralized error processing with environment-specific detail levels
--   **Validation Errors**: Automatic Zod schema validation with detailed error messages
-
-### Available Endpoints
-
-#### Health Check
-
--   `GET /health` - Basic health check
--   `GET /health/db` - PostgreSQL probe (`SELECT 1`)
-
-#### Test Endpoints _(Development)_
-
--   `GET /test` - Basic test endpoint
--   `POST /test/echo` - Echo endpoint for testing request/response flow
-
-### Middleware Stack
-
-1. **CORS Handler** - Cross-origin request handling
-2. **Schema Validator** - Zod-based request validation
-3. **Async Handler** - Error catching wrapper
-4. **Authentication** _(planned)_ - JWT token verification
-5. **Response Handler** - Standardized response formatting
-6. **Error Handler** - Global error processing
-
-### GraphQL Integration _(Coming Soon)_
-
-GraphQL will be integrated alongside REST APIs to provide:
-
--   Complex data queries with single requests
--   Real-time subscriptions for live updates
--   Efficient data fetching with field selection
--   Type-safe client-server communication
-
-The GraphQL endpoint will be available at `/graphql` with a GraphQL Playground for development.
+---
 
 ## Getting Started
 
-To setup the project locally follow the steps below.
-
 ### Prerequisites
 
-Ensure you have the following installed on your system:
+- **Node.js** (v18 or higher) or **Bun** (latest)
+- **npm** or **bun**
+- **PostgreSQL** (v14 or higher) for server database operations
 
--   **[Bun](https://bun.sh/)** (latest version)
--   **[Node.js](https://nodejs.org/)** (v18 or higher)
--   **[PostgreSQL](https://www.postgresql.org/)** (v14 or higher) _(for future database integration)_
--   **[Git](https://git-scm.com/)**
+### Local Setup
 
-### Contribution guidlines
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/dscnitrourkela/project-xangoes.git
+   cd project-xangoes
+   ```
 
-`Contributions are welcome 🎉🎉`
+2. **Setup Client**:
+   ```bash
+   cd client
+   npm install
+   ```
 
-NOTE 1: Please abide by the [Contributing Guidelines](./CONTRIBUTING.md).
+3. **Setup Server**:
+   ```bash
+   cd ../server
+   npm install   # or: bun install
+   cp .env.sample .env
+   ```
+   Configure your `DATABASE_URL` in `server/.env`.
 
-NOTE 2: Please abide by the [Code of Conduct](./CODE_OF_CONDUCT.md).
+---
 
-### Local Repository Setup
+## Running the Client
 
-Please refer to the project's style and contribution guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
+From the `client/` directory:
 
-1.  **Fork** the repo on GitHub
-2.  **Clone** the project to your local system
-    ```bash
-    git clone https://github.com/dscnitrourkela/project-xangoes.git
-    cd project-xangoes
-    ```
-3.  **Commit** changes to your own separate branch
-4.  **Push** your work back up to your fork
-5.  Submit a **Pull request** so that we can review your changes
+```bash
+# Start Next.js development server with Turbopack (default port: 3000)
+npm run dev
 
-### Running the project
+# Run ESLint validation
+npm run lint
 
-1. **Install Dependencies**
+# Build production bundle
+npm run build
 
-    ```bash
-    # Install server dependencies
-    cd server
-    bun install
+# Start production server
+npm run start
+```
 
-    # Install client dependencies
-    cd ../client
-    bun install
-    ```
+Access the frontend in your browser at `http://localhost:3000`.
 
-2. **Environment Setup**
+---
 
-    - Create a `.env` file in the `server` directory and copy the contents of the .env.sample file
+## Running the Server
 
-    - Create a `.env.local` file in the `client` directory  copy the contents of the .env.sample file
+From the `server/` directory:
 
-3. **Running the Application**
+```bash
+# Run with hot-reloading (using Bun)
+bun run dev
 
-    1. **Start the Backend Server**
+# Or run with Node/tsx
+npx tsx watch src/index.ts
+```
 
-        ```bash
-        cd server
-        bun run dev
-        ```
+Server endpoints are available at `http://localhost:5000` (or your configured `PORT`).
 
-        The backend server will start on `http://localhost:3001`
+---
 
-    2. **Start the Frontend Development Server**
+## Available Scripts
 
-        ```bash
-        cd client
-        bun run dev
-        ```
+### Client (`client/package.json`)
+| Script | Command | Purpose |
+|---|---|---|
+| `dev` | `next dev --turbopack` | Starts client development server |
+| `build` | `next build` | Compiles optimized static & dynamic production build |
+| `start` | `next start` | Runs the compiled Next.js production build |
+| `lint` | `next lint` | Executes ESLint across all files |
 
-        The frontend application will start on `http://localhost:3000`
+### Server (`server/package.json`)
+| Script | Command | Purpose |
+|---|---|---|
+| `dev` | `bun run --hot src/index.ts` | Starts backend development server with hot-reloading |
+| `db:generate` | `bunx drizzle-kit generate` | Generates SQL migrations from Drizzle schemas |
+| `db:migrate` | `bunx drizzle-kit migrate` | Applies SQL migrations to the PostgreSQL database |
+| `db:studio` | `bunx drizzle-kit studio` | Opens Drizzle Studio browser interface |
 
-    3. **Access the Application**
-        - Frontend: `http://localhost:3000`
-        - Backend API: `http://localhost:3001`
-        - Health Check: `http://localhost:3001/health`
-        - API Documentation: _Coming soon_
+---
 
-4. **Testing the APIs**
+## Environment Variables
 
-    You can test the available endpoints using curl or any HTTP client:
+### Client (`client/.env`)
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `NEXT_PUBLIC_API_URL` | Optional | `""` (relative `/api`) | Backend base URL (e.g. `http://localhost:5000`) |
 
-    ```bash
-    # Health check
-    curl http://localhost:3001/health
+### Server (`server/.env`)
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `PORT` | Optional | `5000` | Port for the HTTP server |
+| `DATABASE_URL` | Required | N/A | PostgreSQL connection string |
+| `RATE_LIMIT` | Optional | `100` | Max requests allowed per rate limit window |
+| `RATE_LIMIT_WINDOW` | Optional | `60` | Duration of rate limiting window in seconds |
 
-    # Database health check
-    curl http://localhost:3001/health/db
+---
 
-    # Test endpoint
-    curl http://localhost:3001/test
+## API Endpoints Summary
 
-    # Echo test
-    curl -X POST http://localhost:3001/test/echo \
-      -H "Content-Type: application/json" \
-      -d '{"message": "Hello, World!"}'
-    ```
+| Method | Endpoint | Description | Validation Target |
+|---|---|---|---|
+| `GET` | `/` | Root server status | None |
+| `GET` | `/health` | Basic health check | None |
+| `GET` | `/health/detailed` | Detailed uptime & memory | None |
+| `POST` | `/auth/login` | User authentication | Body (`loginValidatorSchema`) |
+| `POST` | `/auth/sign-up` | User registration | Body (`signUpValidatorSchema`) |
+| `GET` | `/auth/me` | Authenticated session check | Header (`Authorization: Bearer <token>`) |
+| `GET` | `/test` | Test endpoints documentation | None |
+| `POST` | `/test/users` | Test user creation | Body (`createUserSchema`) |
+| `GET` | `/test/users` | Test users listing with pagination | Query (`getUserQuerySchema`) |
+| `GET` | `/test/users/:id` | Test user lookup by UUID | Params (`userParamsSchema`) |
+| `PUT` | `/test/users/:id` | Test user update | Params + Body |
+
+---
+
+## Design Guidelines
+
+The frontend strictly implements the design specifications in [`client/DESIGN.md`](client/DESIGN.md):
+- **Typography Stack**: Geist Sans (`font-geist`) as default sans, Inter (`font-inter`), and mono for code.
+- **Theme Variables**: OKLCH color palette with automatic Light / Dark theme transitions.
+- **Spacing**: Container `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`, `space-y-8` between sections.
+- **Focus Rings**: `focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2`.
+- **Accessibility**: Full keyboard accessibility, semantic headings, and ARIA labels.
+
+---
+
+## Contributing
+
+Please see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for contribution guidelines and project standards.
+
+---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## DSC NIT Rourkela
-
-[![DSC NIT Rourkela][dsc-nitrourkela]](https://dscnitrourkela.org)
-
-## Starware
-
-This project is Starware.
-This means you're free to use the project, as long as you star its GitHub repository.
-Your appreciation makes us grow and glow up. ⭐
-
-[dsc-nitrourkela]: ./client/public/repoCover.png
-[contributors-shield]: https://img.shields.io/github/contributors/dscnitrourkela/project-xangoes?style=for-the-badge
-[contributors-url]: https://github.com/dscnitrourkela/project-xangoes/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/dscnitrourkela/project-xangoes?style=for-the-badge
-[forks-url]: https://github.com/dscnitrourkela/project-xangoes/network/members
-[stars-shield]: https://img.shields.io/github/stars/dscnitrourkela/project-xangoes?style=for-the-badge
-[stars-url]: https://github.com/dscnitrourkela/project-xangoes/stargazers
-[issues-shield]: https://img.shields.io/github/issues/dscnitrourkela/project-xangoes?style=for-the-badge
-[issues-url]: https://github.com/dscnitrourkela/project-xangoes/issues
-[license-shield]: https://img.shields.io/github/license/dscnitrourkela/project-xangoes?style=for-the-badge
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://ayussh.vercel.app/"><img src="https://avatars.githubusercontent.com/u/135319056?v=4?s=100" width="100px;" alt="Ayush"/><br /><sub><b>Ayush</b></sub></a><br /><a href="https://github.com/dscnitrourkela/project-xangoes/commits?author=ayussh-2" title="Code">💻</a> <a href="https://github.com/dscnitrourkela/project-xangoes/commits?author=ayussh-2" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://portfolioscyy.netlify.app/playground"><img src="https://avatars.githubusercontent.com/u/180634057?v=4?s=100" width="100px;" alt="Ayan"/><br /><sub><b>Ayan</b></sub></a><br /><a href="https://github.com/dscnitrourkela/project-xangoes/commits?author=AYANscyy2" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/BlessedAmrita"><img src="https://avatars.githubusercontent.com/u/153388147?v=4?s=100" width="100px;" alt="BlessedAmrita"/><br /><sub><b>BlessedAmrita</b></sub></a><br /><a href="https://github.com/dscnitrourkela/project-xangoes/issues?q=author%3ABlessedAmrita" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://portfolio-eight-rose-30.vercel.app/"><img src="https://avatars.githubusercontent.com/u/154359186?v=4?s=100" width="100px;" alt="Veena Sahu"/><br /><sub><b>Veena Sahu</b></sub></a><br /><a href="https://github.com/dscnitrourkela/project-xangoes/issues?q=author%3Aauraexe25" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/siddharth-narayan-mishra"><img src="https://avatars.githubusercontent.com/u/138509510?v=4?s=100" width="100px;" alt="siddharth"/><br /><sub><b>siddharth</b></sub></a><br /><a href="https://github.com/dscnitrourkela/project-xangoes/issues?q=author%3Asiddharth-narayan-mishra" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Abimanyu-A"><img src="https://avatars.githubusercontent.com/u/154288841?v=4?s=100" width="100px;" alt="Abimanyu A"/><br /><sub><b>Abimanyu A</b></sub></a><br /><a href="https://github.com/dscnitrourkela/project-xangoes/commits?author=Abimanyu-A" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project is licensed under the MIT License - see the [`LICENSE`](LICENSE) file for details.

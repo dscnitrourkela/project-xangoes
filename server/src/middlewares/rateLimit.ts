@@ -5,19 +5,15 @@ interface RequestLog {
   timestamps: number[];
 }
 
-export const requestLogs = new Map<string, RequestLog>();
+const requestLogs = new Map<string, RequestLog>();
 
-export const clearRateLimitLogs = () => {
-  requestLogs.clear();
-};
+const LIMIT = env.RATE_LIMIT;
+const WINDOW = env.RATE_LIMIT_WINDOW;
 
 export const rateLimit = async (c: Context, next: Next) => {
   const ip = c.req.header('x-forwarded-for')?.split(',')[0].trim()
             || c.req.header('cf-connecting-ip')
             || 'unknown';
-
-  const LIMIT = env.RATE_LIMIT;
-  const WINDOW = env.RATE_LIMIT_WINDOW;
 
   const now = Date.now();
   const windowStart = now - WINDOW * 1000;

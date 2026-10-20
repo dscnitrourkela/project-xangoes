@@ -96,10 +96,10 @@ export default function Page() {
                     <P>Special formatting for quoted content.</P>
 
                     <Blockquote className="mt-4">
-                        &ldquo;This is a blockquote example. It provides special
+                        &quot;This is a blockquote example. It provides special
                         styling for quoted text with left border and italic
                         formatting. Perfect for highlighting important
-                        statements or citations.&rdquo;
+                        statements or citations.&quot;
                     </Blockquote>
                 </section>
 

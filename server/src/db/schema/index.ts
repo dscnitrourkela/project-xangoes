@@ -1,6 +1,5 @@
 // Export all tables
 export * from "./user";
-export * from "./userExtraDetails";
 export * from "./fest";
 export * from "./club";
 export * from "./event";
@@ -8,5 +7,4 @@ export * from "./institute";
 export * from "./transaction";
 export * from "./eventRegistration";
 export * from "./team";
-export * from "./clubMember";
 export * from "./relations";
