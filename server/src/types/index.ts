@@ -24,3 +24,5 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
         totalPages: number;
     };
 }
+
+export type { AuthContext } from './auth.types';

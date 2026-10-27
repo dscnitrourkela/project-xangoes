@@ -10,12 +10,14 @@
     "test:coverage": "vitest run --coverage",
     "db:generate": "bunx drizzle-kit generate",
     "db:migrate": "bunx drizzle-kit migrate",
-    "db:studio": "bunx drizzle-kit studio"
+    "db:studio": "bunx drizzle-kit studio",
+    "admin:seed": "tsx scripts/create-super-admin.ts"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.4",
     "dotenv": "^17.2.0",
     "drizzle-orm": "^0.44.2",
+    "firebase-admin": "^14.5.0",
     "hono": "^4.8.4",
     "pg": "^8.16.3",
     "zod": "^4.0.0"

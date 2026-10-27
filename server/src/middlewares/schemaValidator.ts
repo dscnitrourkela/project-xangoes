@@ -76,7 +76,6 @@ export const validateRequest = (
 
             // Validate the extracted data against the schema
             await schema.parseAsync(dataToValidate);
-            await next();
         } catch (error) {
             if (error instanceof ZodError) {
                 // Format Zod validation errors into a consistent structure
@@ -89,5 +88,8 @@ export const validateRequest = (
             // Handle unexpected errors
             return sendError(c, "Internal server error", 500);
         }
+
+        // Downstream errors must propagate untouched (not be reported as validation failures)
+        await next();
     };
 };

@@ -40,6 +40,13 @@ const envSchema = z.object({
         .string()
         .min(1, 'GOOGLE_REDIRECT_URI is required')
         .url('GOOGLE_REDIRECT_URI must be a valid URL'),
+    // Firebase Admin credentials (service account). Optional at boot so the API can
+    // start without them; token verification fails with 503 until they are provided.
+    FIREBASE_PROJECT_ID: z.string().optional(),
+    FIREBASE_CLIENT_EMAIL: z.string().optional(),
+    FIREBASE_PRIVATE_KEY: z.string().optional(),
+    // Comma-separated browser origins allowed by CORS
+    CLIENT_ORIGIN: z.string().optional(),
 });
 
 let parsedEnv: EnvConfig;

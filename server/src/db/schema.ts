@@ -42,3 +42,6 @@ export const checkDbConnection = async():
         };
       }
     };
+
+// Re-export tables and types so consumers can import everything from "@/db/schema"
+export * from "./schema/index";

@@ -31,7 +31,7 @@ export const users = pgTable(
             { onDelete: "set null" }
         ),
         idCard: text("id_card"), // photo url id uploaded from frontend via cloudinary uploader
-        mobile: varchar("mobile", { length: 20 }).notNull().unique(),
+        mobile: varchar("mobile", { length: 20 }).unique(), // collected during profile completion
         festID: varchar("fest_id", { length: 255 }).references(() => fests.id, {
             onDelete: "set null",
         }),

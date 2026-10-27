@@ -83,6 +83,9 @@ export class CustomError extends Error {
  * Common error constructors for convenience
  */
 export const createError = {
+    custom: (message: string, statusCode: number, details?: any) =>
+        new CustomError(message, statusCode, details),
+
     badRequest: (message: string = "Bad Request", details?: any) =>
         new CustomError(message, 400, details),
 

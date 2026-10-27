@@ -1,7 +1,5 @@
+import { AuthPanel } from "@/components/auth-panel";
+
 export default function Login() {
-    return (
-        <div>
-            <h1>Login</h1>
-        </div>
-    );
+    return <AuthPanel mode="login" />;
 }

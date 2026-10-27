@@ -127,7 +127,7 @@ server/
 
 ### Authentication & Security
 
--   **[Firebase Admin SDK](https://firebase.google.com/docs/admin/setup)** - Backend authentication and user management (planned)
+-   **[Firebase Admin SDK](https://firebase.google.com/docs/admin/setup)** - Verifies Firebase ID tokens (JWTs, with revocation check) on every protected request
 
 ## Database Schema
 
@@ -234,6 +234,30 @@ All API responses follow a standardized format for consistency:
 
 -   `GET /health` - Basic health check
 -   `GET /health/db` - PostgreSQL probe (`SELECT 1`)
+
+#### Authentication & Access Control Endpoints
+
+All endpoints below need `Authorization: Bearer <Firebase ID token>`.
+
+| Method | Path | Access |
+| ------ | ---- | ------ |
+| `POST` | `/auth/session` | Any signed-in identity. Creates the user on first sign-in and returns the profile plus admin context |
+| `GET` / `PATCH` | `/users/me` | Participant. View or update own profile (`missingFields` / `profileComplete` included) |
+| `GET` | `/users/:id` | The owner, or a super admin |
+| `PATCH` | `/users/:id` | The owner only (anyone else gets 403) |
+| `GET` | `/admins/me` | Active admins (deleted admins get 403 `ADMIN_REMOVED`) |
+| `GET` `POST` | `/admins` | Super admin. `POST` takes `email`, `festID`, `isSuperAdmin`, `allowedToModifyContent`; the Firebase uid is looked up by email |
+| `GET` `PATCH` `DELETE` | `/admins/:id` | Super admin (`DELETE` is a soft delete) |
+| `GET` | `/fests/:festId/admins` | Admin of that fest, or a super admin |
+
+Auth failures use `error.code`: `AUTH_REQUIRED`, `TOKEN_MALFORMED`, `TOKEN_INVALID`, `TOKEN_EXPIRED`, `TOKEN_REVOKED`, `USER_DISABLED` (401); `USER_NOT_PROVISIONED`, `ADMIN_REQUIRED`, `ADMIN_REMOVED`, `SUPER_ADMIN_REQUIRED`, `FEST_SCOPE_FORBIDDEN`, `CONTENT_EDIT_FORBIDDEN`, `NOT_OWNER` (403); `AUTH_NOT_CONFIGURED` (503).
+
+**Protecting new routes.** Put `authenticate` first, then a guard from `@/middlewares`: `requireParticipant`, `requireAdmin`, `requireSuperAdmin`, `requireFestAdmin('festId')`, `requireContentEditor('festId')`. All rules live in `src/services/authorization.ts`; do not re-implement permission checks in controllers.
+
+**Environment.** `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY` (service account, keep the `
+` escapes) and `CLIENT_ORIGIN` (CORS, default `http://localhost:3000`). Never commit `.env`.
+
+**First super admin.** Sign in once, then run `npm run admin:seed -- you@example.com`.
 
 #### Test Endpoints _(For Understanding Code Flow)_
 

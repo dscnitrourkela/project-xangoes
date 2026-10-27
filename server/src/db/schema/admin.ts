@@ -1,12 +1,9 @@
 import {
   boolean,
-  pgEnum,
   pgTable,
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core';
-
-export const genderEnum = pgEnum("gender", ["MALE", "FEMALE", "OTHERS"]);
 
 export const admins = pgTable("admins", {
     id: varchar("id", { length: 255 }).primaryKey(),
