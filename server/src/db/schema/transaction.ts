@@ -1,6 +1,8 @@
 import {
+    boolean,
     index,
     integer,
+    json,
     pgEnum,
     pgTable,
     text,
@@ -41,10 +43,15 @@ export const transactions = pgTable(
         }),
         comment: text("comment"),
         screenshot: text("screenshot"), // optional if payment gateway is used
+        isVerified: boolean("is_verified").default(false), // convenience flag
+        rejectionReason: text("rejection_reason"),
+        reviewedBy: varchar("reviewed_by", { length: 255 }),
+        reviewedAt: timestamp("reviewed_at"),
         provider: varchar("provider", { length: 50 })
             .notNull()
             .default("RAZORPAY"),
         providerOrderID: varchar("provider_order_id", { length: 255 }),
+        metadata: json("metadata"),
         createdAt: timestamp("created_at").notNull().defaultNow(),
         updatedAt: timestamp("updated_at").notNull().defaultNow(),
     },

@@ -1,6 +1,7 @@
 import {
     index,
     pgTable,
+    text,
     timestamp,
     uniqueIndex,
     varchar,
@@ -23,6 +24,8 @@ export const eventRegistrations = pgTable(
         teamID: varchar("team_id", { length: 255 }).references(() => teams.id, {
             onDelete: "set null",
         }),
+        status: varchar("status", { length: 50 }).default("CONFIRMED").notNull(), // 'CONFIRMED' | 'PENDING_PAYMENT' | 'CANCELLED' | 'REJECTED'
+        cancellationReason: text("cancellation_reason"),
         createdAt: timestamp("created_at").notNull().defaultNow(),
         updatedAt: timestamp("updated_at").notNull().defaultNow(),
     },
